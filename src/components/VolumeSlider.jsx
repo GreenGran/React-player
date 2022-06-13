@@ -1,31 +1,21 @@
-import React, { useState,useEffect } from "react";
+import React from "react";
 import Box from "@mui/material/Box";
 import Slider from "@mui/material/Slider";
 import VolumeDown from "@mui/icons-material/VolumeDown";
 import VolumeUp from "@mui/icons-material/VolumeUp";
 import Stack from "@mui/material/Stack";
 import { styled } from '@mui/material/styles';
-import { debounce } from "lodash";
+
 
 export default function VerticalSlider(props) {
 
 
-
-  const PrettoSlider = styled(Slider)({
+//changes slider color to black
+  const BlackSlider = styled(Slider)({
     color: '#14171A',
-  
   });
 
 
-
-
-
-
-
-
-    var _ = require('lodash');
-    // const [volume,setVolume] = useState(0.5);
-    let volume = 50;
   function preventHorizontalKeyboardNavigation(event) {
     if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
       event.preventDefault();
@@ -35,30 +25,20 @@ export default function VerticalSlider(props) {
 function changeVolumeStateOnCommit(event, value)
 {
   props.onCommitVolume(value/100);
-  console.log(value/100);
-  console.log("!1!");
 }
 
-  function volumeStateHandler(){
+function volumeStateHandler(){
     return props.volumeState * 100
-  }
+}
 
-function labelFormatter(labelValue)
-{
+function labelFormatter(labelValue){
   return labelValue.toFixed(0);//fixing formating issue
 }
 
-
   const handleChange = (event, newValue) => {
-
-
-    //  setVolume(newValue);
-     volume =newValue
      props.volumeFunc(newValue/100);
-    //  console.log(newValue+" im in 2");
-
-  
   };
+
   return (
     <Box sx={{ height: "100%" }}>
       <Stack
@@ -68,9 +48,8 @@ function labelFormatter(labelValue)
         alignItems="center"
       >
        <VolumeUp  color={!props.videoLoaded ? 'disabled' : 'inherit'} />
-        <PrettoSlider
+        <BlackSlider
          
-          // defaultValue={50}
           defaultValue={volumeStateHandler()}
           orientation="vertical"
          onChange={handleChange}

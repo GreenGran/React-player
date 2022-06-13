@@ -1,4 +1,4 @@
-import React ,{useEffect, useState} from "react";
+import React ,{ useState} from "react";
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
@@ -8,7 +8,6 @@ import Grid from '@mui/material/Grid';
 function SubNode(props){
 
     const [width,setwidth]= useState(TextSizeChangerFunction());
-    const [TextSizeController,setTextSizeController]= useState("5%");
     const Item = styled(Paper)(({ theme }) => ({
         
         backgroundColor: "rgba(0,0,0,0)",
@@ -32,7 +31,6 @@ function SubNode(props){
         wordWrap: "elipse",
         padding: "2px",
         backgroundColor: "white"
-
     }
     function TextSizeChangerFunction(){
         let newWidth = props.width.slice(0, -1);
@@ -45,22 +43,16 @@ function SubNode(props){
         }else{
             return "100%";
         }
-       
       }
-
-
-
     function inComponentDurationAtPoint(point){
         let durationAtPointVar = props.durationAtPoint(point);
         durationAtPointVar = durationAtPointVar.toString();
-        while(durationAtPointVar.length < 8){//add space so it will allways have the same box size no matter nomber of digits
+        while(durationAtPointVar.length < 8){//add space so it will allways have the same box size no matter number of digits
             if(durationAtPointVar.length % 2 === 0){
                 durationAtPointVar=durationAtPointVar+"\u00A0";
             }else{
                 durationAtPointVar= "\u00A0"+durationAtPointVar;
-                
-            }
-            
+            } 
         }
         
          return durationAtPointVar;
@@ -70,18 +62,12 @@ function SubNode(props){
     return <div>
   <Box sx={{ flexGrow: 1 }} >
       <Grid container spacing={0}>
-     
         <Grid item xs={6}>
           <Item style={textSize} >{inComponentDurationAtPoint( (props.start - 0.5 ))}</Item>
         </Grid>
-     
-    
         <Grid item xs={6}>
           <Item style={textSize}>{inComponentDurationAtPoint(props.start+ +0.5 )}</Item>
-          </Grid>
-    
-  
-     
+        </Grid>
       </Grid>
     </Box>
 
@@ -90,13 +76,9 @@ function SubNode(props){
         <Grid item xs={6}>
           <Item style={lineStyle}> | </Item>
         </Grid>
-    
         <Grid item xs={6}>
           <Item style={lineStyle}>|</Item>
         </Grid>
-      
-       
-    
       </Grid>
     </Box>
 

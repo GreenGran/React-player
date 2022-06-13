@@ -1,33 +1,22 @@
-import React ,{useEffect, useState} from "react";
+import React ,{ useState} from "react";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
-import { styled } from '@mui/material/styles';
+
 
 
 
 export default function SpeedRadioButtonsGroup(props) {
-  
-
- 
-    
 
     const [button,setButton] = useState(props.speedState);
 
-
     function HandleChange(event) {
     const StringToNumVar = Number(event.target.value)
-    console.log(StringToNumVar);
-    console.log(typeof(StringToNumVar));
     setButton(StringToNumVar);
     props.speedFunc(StringToNumVar);
   }
-  
- 
-  
-
   return (
     <FormControl disabled={!props.videoLoaded }  style={{margin: "auto"}}  >
       <FormLabel ><b>Video Speed</b></FormLabel>

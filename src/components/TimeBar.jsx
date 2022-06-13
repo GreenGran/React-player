@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import BarWithTimeOnHover from "./BarWithTimeOnHover.jsx";
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -6,17 +6,18 @@ import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import Node from "./Node";
 
-export function TimeBar(props) {
 
+export function TimeBar(props) {
+//prevents scroll wheel so the user will not scroll up while trying to increses size of timeBar
     window.addEventListener("wheel", e => e.preventDefault(), { passive:false })
     window.addEventListener("keydown", function(e) {
       if(["Space","ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].indexOf(e.code) > -1) {
           e.preventDefault();
       }
   }, false);
-    const [duration, setDuration] = useState();
-    const [count, setCount] = useState(0);
-    const [timeFormat, setTimeformat] = useState(false)
+
+   
+    const timeFormatRef = useRef(true)
     const Item = styled(Paper)(({ theme }) => ({
         backgroundColor: "#657786",
         ...theme.typography.body2,
@@ -24,21 +25,19 @@ export function TimeBar(props) {
         textAlign: 'center',
         color: theme.palette.text.secondary,
         boxShadow: "none"
-       
-    
-
       }));
 
 
   useEffect(() => {
-    
     props.toggleRef.current = timeFormatToggle;
   }, [])
   
   
 function timeFormatToggle(status){
-  console.log("inside!"+status);
-  setTimeformat(status);
+  
+  // setTimeformat(status);
+  timeFormatRef.current = status;
+
 }
 const lineStyle={
     background:" linear-gradient(#000, #000) no-repeat center/3px 100%",
@@ -50,23 +49,22 @@ function timeFormetter(timeInSeconds){
     const secs = (timeInSeconds % 60).toFixed(3);
     const mins = Math.trunc(timeInSeconds / 60); 
     return (mins +":"+ secs);
-  }
+}
  
 function DurationAtPoint(point){
 
      const onePercent = props.playerRef.current.getDuration() / 100;
-
-     if(timeFormat){
-      return (point * onePercent).toFixed(3);
-     }else{
+     if(timeFormatRef.current){
       return (timeFormetter((point * onePercent)));
+     }else{
+      
+      return (point * onePercent).toFixed(3);
      }
     
     
 }
 
 const textSize ={
-    // fontSize: width,
     border: '2px solid black',
     textAlign: 'center',
     margin:"0px",
@@ -80,13 +78,13 @@ const textSize ={
 
   return<div > 
  
-  <Box  sx={{ flexGrow: 1 }} >
+  <Box  sx={{ flexGrow: 1 }}  >
       <Grid container spacing={0}>
-        <Grid item xs={1.2}>
-          <Item ><span style={textSize}> {DurationAtPoint(5)}</span> </Item>
+        <Grid item xs={1.2}> 
+          <Item ><span style={textSize}>{DurationAtPoint(5)}</span> </Item>
         </Grid>
         <Grid item xs={1.2}>
-          <Item > <span style={textSize}> {DurationAtPoint(15)} </span> </Item>
+          <Item > <span style={textSize}>{DurationAtPoint(15)} </span> </Item>
         </Grid>
         <Grid item xs={1.2}>
           <Item> <span style={textSize}>{DurationAtPoint(25)} </span> </Item>
@@ -149,7 +147,7 @@ const textSize ={
         </Grid>
       </Grid>
     </Box>
-    <BarWithTimeOnHover    ToggleStatus={timeFormat}   duration= {props.playerRef.current.getDuration()} seekTo = {props.seekTo} playerRef = {props.playerRef.current} /> 
+    <BarWithTimeOnHover    ToggleStatus={timeFormatRef.current}   duration= {props.playerRef.current.getDuration()} seekTo = {props.seekTo} playerRef = {props.playerRef.current} /> 
   </div>;
 }
   

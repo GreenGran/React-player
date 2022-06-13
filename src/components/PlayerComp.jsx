@@ -29,8 +29,6 @@ const [count,setCount]= useState(0);
 const [playing,setPlaying]= useState(false);
 const [looping,setLooping]= useState(false);
 const [mute,setMute]= useState(false);
-const [volumeState,setVolumeState] = useState(0.5);
-
 const imgRef = useRef();
 
 
@@ -54,22 +52,9 @@ const ChangeVolume =(newVolume)=>{
 const ChangeSpeed =(newVolume)=>{
   setSpeed(newVolume);
 };
-const ChangePlaying =(status)=>{
-
-  // if(playing===true){
-  //   setPlaying(false);
-  //   console.log("in true "+playing);
-  // }else{
-  //   console.log("in false; "+playing);
-  //   setPlaying(true);
-  //   console.log("set to" +playing);
-  // }
-  //  console.log("cngageds to "+playing);
-  //  setCount(count+1);
-setPlaying(status);  
-};
 
 const Changelooping =(newLooping)=>{
+
   setLooping(newLooping);
 };
 
@@ -79,10 +64,12 @@ const onClickFullscreen = () => {
 
 
     useEffect(() => {
+     
       props.valRef.current = ChangeVolume;
       props.speedRef.current = ChangeSpeed;
-      props.playingRef.current = ChangePlaying;
+
       props.looping.current = Changelooping;
+    
    
       document.addEventListener("keydown", onKeyDown);
       return () => {
@@ -94,23 +81,12 @@ const onClickFullscreen = () => {
 
 
 
-    // const escFunction = useCallback((event) => {
-    //   if (event.keyCode === 27) {
-    //     console.log("esc pressed");
-    //   }
-    // }, []);
-    
 
 
-
-     const onKeyDown = useCallback((event) => {
-      console.log("event triggerd");
-  
-      //  console.log(event);
-    if(event.key ===" "){ // NEEDS LOOKING IN TO, IT CHASHES THE APP
-      // debounce(playingBtn,50);
+//fucntion for the event keypress lisener
+     const onKeyDown = useCallback((event) => { 
+    if(event.key ===" "){ 
       playingBtn();
-      // console.log("event triggerd")
     }
     if(event.key ==="m"){
       muteFunction();
@@ -127,30 +103,22 @@ const onClickFullscreen = () => {
       console.log("+5");
       move5secs(5);
     }
-      
-
-    setCount(count+1);
+    setCount(count+1);// basic force update
     }, []);
 
 
 function move5secs(direction){
-    console.log(compRef.current.getCurrentTime()+ direction);
     compRef.current.seekTo(compRef.current.getCurrentTime()+ direction,'seconds');
-
-
-
 }
 
 function videoEnd(){
   console.log("set to false");
   playRef.current = false;
-
   setPlaying(playRef.current);
 }
 
 function playingBtn(){
   playRef.current = !playRef.current;
-
   setPlaying(playRef.current);
   
 }
@@ -194,20 +162,7 @@ function captureVideoFrame(video, format, quality) {
 
 // --------------------------------------------------------------------------------------------------------------------
 
-const toLookLikeButton={
 
-    display: "block",
-    width: "115px",
-    height: "25px",
-    background:" #4E9CAF",
-    padding: "10px",
-    textAlign: "center",
-    borderRadius: "5px",
-    color: "white",
-    fontWeight: "bold",
-    lineHeight:" 25px",
-
-}
 const centerDivStyle ={
   display: "flex",
   alignItems: "center",
@@ -228,17 +183,7 @@ const buttonsStyle ={
 
 function captureFrame(){
   const frame = captureVideoFrame(compRef.current.getInternalPlayer())
-  console.log( 'captured frame', frame);
   imgRef.current = frame.dataUri;
-
-
-
-  const video =compRef.current.getInternalPlayer();
-  console.log(video);
-
-
-
-
    return frame.dataUri;
  
 }
@@ -249,53 +194,19 @@ const saveimage = () => {
     "VideoFrame"
   );
   };
-  // const handleKeyUp =(event)=>{
-
-
-  //   if(event.iAmNotAlone){
-  //     window.removeEventListener('keyup', handleKeyUp);
-  //     console.log("removed");
-  //   }
-  //   console.log("event triggerd");
-  //   //  console.log(event);
-  // if(event.key ===" "){ // NEEDS LOOKING IN TO, IT CHASHES THE APP
-  //   // debounce(playingBtn,50);
-  //   playingBtn();
-    
-  // }
-  // if(event.key ==="m"){
-  //   muteFunction();
-  // } 
-  // if(event.key ==="f"){
-  //   screenfull.toggle(findDOMNode(compRef.current))
-  // }
-
-  // if(event.key ==="ArrowLeft"){
-  //   console.log("-5");
-  // }
-  // if(event.key ==="ArrowRight"){
-  //   console.log("+5");
-  // }
-  // }
-
-  // //  document.addEventListener('keyup', handleKeyUp,{ once: true });
-
- 
+  
 function muteFunction(){
   muteRef.current = !muteRef.current;
   setMute(muteRef.current);
 }
-  function temp(){
+//set video loaded when the video is fully loaded
+  function onVideoReady(){
     props.playerRef.current = compRef.current;
-    console.log(props.playerRef.current);
-    console.log(compRef.current);
-    console.log(compRef.current.getDuration());
     props.didVideoLoad(true);
-    setCount(count+1);
+    setCount(count+1);// basic force update
  
   }
-  function temp2(){
-  //  console.log("doubla");
+  function fullScreenFunc(){
   screenfull.toggle(findDOMNode(compRef.current))
   }
 
@@ -306,21 +217,8 @@ const config = {
         }
       };
 return <div style={{borderStyle: "double", backgroundColor: "#14171A"}} >
-
-
-
-
-
-<ReactPlayer   onDoubleClick={temp2} config={config} style={{padding:"0px"}} playing={playing} playbackRate={speed}  onReady={temp} 
- ref={compRef} onEnded={videoEnd}  muted={mute} volume={volume} loop={looping} url={props.videoFilePath}  width="100%" height="65vh" controls={true} />
-
-
-
-
-
-
-
-
+<ReactPlayer   onDoubleClick={fullScreenFunc} config={config} style={{padding:"0px"}} playing={playing} playbackRate={speed}  onReady={onVideoReady} 
+ ref={compRef} onEnded={videoEnd}  muted={mute} volume={volume} loop={looping} url={props.videoFilePath}  width="100%" height="75vh" controls={true} />
 <div style={centerDivStyle} >
 
 
@@ -328,71 +226,50 @@ return <div style={{borderStyle: "double", backgroundColor: "#14171A"}} >
       <Grid container spacing={0}>
         <Grid item xs={2}>
           <Item >
-          
-          <Button  style={ buttonsStyle} onClick={() => move5secs(5)} title='fast farward 5 seconds(left arrow key)' variant='contained'  color="inherit" >
-<Forward5Icon/>
-</Button>
-
- </Item>
-        </Grid>
-        <Grid item xs={2}>
-          <Item >  
-          
-<Button  style={ buttonsStyle} variant="contained"  color="inherit" title='play(space)' onClick={playingBtn}>
-{playing ?<StopIcon/>:<PlayArrowIcon/> }
-</Button>
+            <Button  style={ buttonsStyle} onClick={() => move5secs(-5)} title='move backwards 5 seconds(right arrow key)' variant='contained'  color="inherit" >
+              <Replay5Icon/>
+            </Button>
           </Item>
-        </Grid>
-        <Grid item xs={2}>
-          <Item> 
-          
-
-<Button  style={ buttonsStyle} onClick={() => move5secs(-5)} title='move backwards 5 seconds(right arrow key)' variant='contained'  color="inherit" >
-<Replay5Icon/>
-</Button>
-           </Item>
-        </Grid>
-        <Grid item xs={2}>
-          <Item> 
-          
-<Button  style={ buttonsStyle}  onClick={muteFunction} title='mute(m)' variant='contained'  color="inherit" >
-{mute ?<VolumeOffIcon /> :<VolumeUp/>}
-</Button>
- </Item>
-          </Grid>
-        <Grid item xs={2}>
-          <Item> 
-          
-
-<Button   style={ buttonsStyle} onClick={()=> saveimage()} title='download a the current frame' variant="contained" color="inherit"  >
-<AddPhotoAlternateIcon/>
-</Button>
-
-           </Item>
-        </Grid>
-        <Grid item xs={2}>
-          <Item>
-          
-<Button  style={ buttonsStyle}  onClick={onClickFullscreen} title='fullscreen(f)' variant='contained'  color="inherit" >
-<FullscreenIcon/>
-</Button>
-            </Item>
-        </Grid>
-        
-        </Grid>
+      </Grid>
+      <Grid item xs={2}>
+        <Item >  
+          <Button  style={ buttonsStyle} variant="contained"  color="inherit" title='play(space)' onClick={playingBtn}>
+            {playing ?<StopIcon/>:<PlayArrowIcon/> }
+          </Button>
+        </Item>
+      </Grid>
+      <Grid item xs={2}>
+        <Item> 
+          <Button  style={ buttonsStyle} onClick={() => move5secs(5)} title='fast farward 5 seconds(left arrow key)' variant='contained'  color="inherit" >
+            <Forward5Icon/>
+          </Button>
+        </Item>
+      </Grid>
+      <Grid item xs={2}>
+        <Item> 
+          <Button  style={ buttonsStyle}  onClick={muteFunction} title='mute(m)' variant='contained'  color="inherit" >
+            {mute ?<VolumeOffIcon /> :<VolumeUp/>}
+          </Button>
+        </Item>
+      </Grid>
+      <Grid item xs={2}>
+        <Item> 
+          <Button   style={ buttonsStyle} onClick={()=> saveimage()} title='download a the current frame' variant="contained" color="inherit"  >
+            <AddPhotoAlternateIcon/>
+          </Button>
+        </Item>
+      </Grid>
+      <Grid item xs={2}>
+        <Item>  
+          <Button  style={ buttonsStyle}  onClick={onClickFullscreen} title='fullscreen(f)' variant='contained'  color="inherit" >
+            <FullscreenIcon/>
+          </Button>
+        </Item>
+      </Grid>  
+      </Grid>
       
     </Box>
-
-
-
-
-
-
-
-
 </div>
-
-
 </div>
 
 }

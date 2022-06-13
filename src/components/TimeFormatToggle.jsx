@@ -1,20 +1,23 @@
 
-import React, { useState } from "react";
+import React from "react";
+import Switch from '@mui/material/Switch';
 
-    function TimeFormatToggle(props) {
-      const [toggle,setToggle] = useState(false);
-      function temp(event){
-        setToggle(!toggle);
-        props.timeFormatChanger()
-        //console.log("toggleing "+toggle);
-      }
-      return (<div>
-        <p> <b>normal/seconds only </b></p>
-          <label  className="switch">
-           <input onChange={temp} type="checkbox" />
-            <span className="slider round"></span>
-            </label> 
-        </div>);
-    }
-  
-export default TimeFormatToggle;
+
+export default function TimeFormatToggle(props) {
+
+
+  const handleChange = (event) => {
+    props.timeFormatChanger();
+  };
+
+  return (
+    <div>
+     <p> <b>normal/seconds only </b></p>
+    <Switch color="default"
+      checked={props.checked}
+      onChange={handleChange}
+      inputProps={{ 'aria-label': 'controlled' }}
+    />
+    </div>
+  );
+}

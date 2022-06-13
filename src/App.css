@@ -1,7 +1,7 @@
 .controlBG{
     background-color: #657786;
     /* all the componants of the video player seem to take 73% of screen height so timeline bat takes 25vh, 2% margin for error */
-    height: 25vh; 
+    height: 100%; 
     width: 100%;
     
    

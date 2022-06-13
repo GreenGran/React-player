@@ -1,4 +1,4 @@
-import React, { useState } from "react"; 
+import React from "react"; 
 import { Direction, FormattedTime, Slider } from 'react-player-controls'
 import PropTypes from 'prop-types';
  
@@ -27,23 +27,24 @@ const TimeTooltip = ({ToggleStatus,numSeconds, style = {} }) => (
     style={{
       display: 'inline-block',
       position: 'absolute',
-      // bottom: '100%',
       transform: xTranslate,
-      padding: 2,
-      borderRadius: 3,
+      padding: 5,
+      borderRadius: 10,
       background: '#14171A',
       color: '#F5F8FA',
       fontSize: 12,
       fontWeight: 'bold',
-      lineHeight: 2,
+      lineHeight: 1,
       textAlign: 'center',
-      
+      bottom:10,
       zIndex:1000,
       ...style,
       
     }}
   >
-    { ToggleStatus ?   <p>{numSeconds}</p> :  <FormattedTime numSeconds={numSeconds} />}
+  {/* //changes baseed on time format toggle */}
+    { !ToggleStatus ?   <p style={{marginLeft:"5px",marginRight:"5px"}}>{numSeconds.toFixed(5)}</p> : <p style={{marginLeft:"5px",marginRight:"5px"}}> <FormattedTime 
+     numSeconds={numSeconds} />  </p>}
   </div>
 )
 
